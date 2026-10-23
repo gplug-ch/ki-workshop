@@ -23,11 +23,34 @@ Schritte 4–5 laufen parallel zu 1–3: das Gerät braucht Minuten zum Neustart
   Intel-Chip wählen; Windows: Installer verlangt WSL 2 und einen Neustart). Download ca. 1 GB,
   Installation 10 min: gleich als Erstes starten, danach Docker Desktop öffnen und warten, bis es
   *Running* meldet. Besser schon zu Hause erledigen.
+- Windows: WSL 2 vor Docker Desktop installieren. PowerShell **als Administrator** öffnen
+  (Rechtsklick auf Start → *Terminal (Administrator)*), dann:
+  ```powershell
+  wsl --install --no-distribution
+  ```
+  Notebook neu starten. Test in normaler PowerShell: `wsl --status` meldet Standardversion 2.
+  Ist WSL schon installiert, bringt `wsl --update` es auf den aktuellen Stand. Meldet Windows, die
+  Virtualisierung sei deaktiviert: im BIOS/UEFI *Intel VT-x* bzw. *AMD-V/SVM* einschalten.
 - Vom Tisch: Zettel mit Workshop-WLAN (Name, Passwort), Product-ID und API-Key.
 
 Notebook zuerst ins Workshop-WLAN, Schritte 1–3 brauchen Internet.
 
 Terminal: macOS *Terminal*, Linux beliebig, Windows *PowerShell*. Alle Befehle im Workshop-Ordner.
+
+Windows-Alternative zu PowerShell: Ubuntu in WSL. Dann gelten überall die Befehle für
+macOS / Linux (`export`, `./docker-run.sh`), PowerShell-Sperren fallen weg.
+1. Ubuntu installieren (PowerShell): `wsl --install -d Ubuntu`. Beim ersten Start Linux-Namen und
+   -Passwort festlegen.
+2. Docker Desktop → *Settings* → *Resources* → *WSL integration* → *Ubuntu* einschalten →
+   *Apply & restart*.
+3. Ubuntu öffnen (Startmenü → *Ubuntu*), Test: `docker run --rm hello-world`.
+4. Workshop-Ordner (Schritt 1) unter Windows herunterladen, dann ins Linux-Home kopieren, dort
+   laufen Dateizugriffe viel schneller als über `/mnt/c`:
+   ```sh
+   cp -r /mnt/c/Users/<name>/ki-workshop ~/
+   cd ~/ki-workshop
+   chmod +x *.sh                  # nötig, falls ./docker-run.sh "Permission denied" meldet
+   ```
 
 ## 1. Workshop-Ordner herunterladen
 
@@ -88,6 +111,12 @@ Claude-Modelle von Anthropic*.
    ```sh
    ./docker-run.sh bash            # Windows: .\docker-run.ps1 bash
    opencode --version              # erwartet: opencode v2.0.32
+   ```
+   Windows meldet `UnauthorizedAccess` bzw. „Ausführung von Skripts ist deaktiviert“: PowerShell
+   blockiert das Skript. Im selben Fenster freigeben (gilt nur für dieses Fenster) und neu starten:
+   ```powershell
+   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   .\docker-run.ps1 bash
    ```
 2. Nur wer git kennt und geklont hat: im Container Namen für Commits setzen (gilt nur für diesen
    Ordner). Alle anderen überspringen, git braucht es im Workshop nicht; funktionierende Stände
