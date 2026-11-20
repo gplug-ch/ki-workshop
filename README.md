@@ -14,65 +14,57 @@ Tasmota-WebUI.
 
 Ablauf pro Durchführung im Ordner [`workshop-instances/`](workshop-instances/):
 
-- [Do 12.11.2026, 17:00–20:00](workshop-instances/2026-11-12.md)
+- [Do 14.01.2027, 17:00–20:00](workshop-instances/2027-01-14.md)
 
 ## Mitbringen
 
-Eigener gPlug ([gplug.ch](https://gplug.ch)), Notebook (macOS, Linux, Windows mit Ubuntu in WSL) mit Netzteil,
+Eigener gPlug ([gplug.ch](https://gplug.ch)), Notebook (Windows, macOS oder Linux) mit Netzteil,
 USB-Datenkabel. Installiert: [Docker Desktop](https://docs.docker.com/get-started/get-docker/)
-und ein Texteditor. Sonst keine Vorbereitung nötig.
+(Linux auch Docker Engine) und ein Texteditor. Sonst keine Vorbereitung nötig.
 
 ## Einführung
 
 Folien zur Einführung: <https://gplug-ch.github.io/ki-workshop/slides/>
 
-## Vor Ort einrichten
+## Vor Ort einrichten (40 min)
 
-Schritt für Schritt mit erwarteter Ausgabe: [`RUNBOOK.md`](RUNBOOK.md). Kurzfassung:
+Ein Runbook pro System, Schritt für Schritt mit erwarteter Ausgabe. Übersicht:
+[`RUNBOOK.md`](RUNBOOK.md).
 
-1. Workshop-Ordner als ZIP holen, `./docker-run.sh` starten. Lädt
-   beim ersten Mal das fertige Image und startet den Agenten opencode. Zugang zum Sprachmodell
-   ist eingebaut.
-2. gPlug ins Workshop-WLAN, `http://<gplug-ip>` öffnen. Helfer prüfen Firmware und Zeitzone.
-3. IP eintragen und Starter laden:
-   ```sh
-   echo <gplug-ip> > .gplug
-   ./upload.sh app/spot.be app/autoexec.be
-   ./log.sh                                  # erwartet: SPOT: v… geladen, keine BRY:-Fehlermeldung
-   ```
-   Die WebUI zeigt jetzt die Preislinie (Simulator, kein Smart Meter nötig).
+| Notebook | Runbook | Terminal |
+|---|---|---|
+| Windows | [`RUNBOOK_WINDOWS.md`](RUNBOOK_WINDOWS.md) | Ubuntu in WSL (empfohlen) oder PowerShell |
+| macOS | [`RUNBOOK_MACOS.md`](RUNBOOK_MACOS.md) | Terminal |
+| Linux | [`RUNBOOK_LINUX.md`](RUNBOOK_LINUX.md) | beliebig; Einfügen mit Ctrl+Shift+V |
 
-Befehle für Linux, macOS und Ubuntu in WSL. Windows nur mit PowerShell:
-[`WINDOWS_POWERSHELL.md`](WINDOWS_POWERSHELL.md).
+Danach läuft der Agent opencode im Docker-Container (Zugang zum Sprachmodell eingebaut, gilt nur
+am Workshop-Tag), der gPlug ist im Workshop-WLAN und zeigt den Starter: die Preislinie eines Tages
+(Simulator, kein Smart Meter nötig).
 
-## Übung (45 min)
+## Übung (65 min)
 
 Ablauf, Prompts und Prüfschritte: [`EXERCISES.md`](EXERCISES.md) ([PDF, A4](docs/EXERCISES.pdf)).
 
-1. Energie-Balken mit kWh-Achse — **Pflicht**
-2. Negativpreis: Balken orange, Bereich unter 0 schattiert — **Pflicht**
-3. 3 Tage mit Stundenwerten — für Schnelle
-4. Vergütungs-Chart mit Σ — für Schnelle
+| Teil | Schritt | Für wen |
+|---|---|---|
+| A, von Hand | 0 Hello World: `app/hello.be` über die WebUI hochladen und starten (vor dem Starter, Runbook Schritt 6) | alle |
+| B, mit opencode | 0 Hello World: vom Ein-Satz-Prompt zum vollständigen Prompt, der Agent schreibt `app/hello_agent.be` | alle |
+| | 1 Energie-Balken mit kWh-Achse | Pflicht |
+| | 2 Negativpreis: Balken orange, Bereich unter 0 schattiert | Pflicht |
+| | 3 3 Tage mit Stundenwerten | optional, für Schnelle |
+| | 4 Vergütungs-Chart mit Σ | optional, für Schnelle |
+| | 5 2 Tage mit Viertelstunden | optional, für Fortgeschrittene |
 
 Hängen geblieben: Checkpoint des vorigen Schritts `app/steps/spot_N.be` nach `app/spot.be`
 kopieren.
 
 ## Nach dem Workshop
 
-- gPlug zurück ins Heim-WLAN.
-- Am Smart Meter: in `app/spot.be` `"sim": false` setzen und `./upload.sh app/spot.be`.
-- Weiterarbeiten mit eigenem Zugang zum Sprachmodell: [`SETUP_OPENCODE.md`](SETUP_OPENCODE.md),
-  Image lokal bauen mit `./docker-run.sh --build`.
-- Weiterarbeiten ohne KI, nur mit Texteditor und Upload von Hand (Skript oder WebUI):
+- gPlug zurück ins Heim-WLAN, am Smart Meter Simulator ausschalten: Runbook deines Systems,
+  Abschnitt *Nach dem Workshop*.
+- Weiterarbeiten mit eigenem Zugang zum Sprachmodell: [`SETUP_OPENCODE.md`](SETUP_OPENCODE.md).
+- Weiterarbeiten ohne KI, nur mit Texteditor und Upload von Hand:
   [`SETUP_OHNE_KI.md`](SETUP_OHNE_KI.md).
-
-## Wichtige Dateien
-
-- `app/spot.be` – die App, an der du arbeitest. `app/steps/` – Checkpoints nach jedem Schritt.
-- `upload.sh`, `brcmd.sh`, `log.sh` – Gerät bedienen (hochladen, Berry-Befehl, Konsole).
-- `AGENTS.md` – Regeln für den Coding-Agenten (liest opencode automatisch).
-- `LEGENDE.md` – Begriffe und Abkürzungen.
-- `WINDOWS_POWERSHELL.md` – Abweichungen für Windows ohne Ubuntu.
 
 
 ## Lizenz
